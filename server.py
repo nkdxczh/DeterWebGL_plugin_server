@@ -23,9 +23,18 @@ class S(SimpleHTTPRequestHandler):
         else:
             file_name = self.path[len(PATH)+2:]
             domains = file_name.split('/')
+            if ':' not in domains[0]:
+                return
             domain = domains[0].split(':')[0] + "://" + domains[0].split(':')[1]
+            folder = PATH+'/'+domains[0]
+            if not os.path.exists(folder):
+                os.makedirs(folder)
             for i in range(1,len(domains)):
                 domain += '/' + domains[i]
+                folder += '/' + domains[i]
+                if i < len(domains) - 1 and not os.path.exists(folder):
+                    print "mkdir "+folder
+                    os.makedirs(folder)
             #download file
             response = urllib2.urlopen(domain)
             html = response.read()
@@ -43,6 +52,8 @@ class S(SimpleHTTPRequestHandler):
 
         #construct folder and index file name
         domains = post_body.split('/')
+        if '?' in domains[-1]:
+            domains[-1] = domains[-1].split('?')[0]
         folder = domains[0] + domains[2]
         file_name = folder
         if not os.path.exists(PATH+'/'+folder):
@@ -55,7 +66,7 @@ class S(SimpleHTTPRequestHandler):
         if '.' not in domains[-1]:
             if not os.path.exists(PATH+'/'+file_name):
                 os.makedirs(PATH+"/"+file_name)
-            file_name += "index.html"
+            file_name += "/index.html"
 
         #download file
         response = urllib2.urlopen(post_body)
