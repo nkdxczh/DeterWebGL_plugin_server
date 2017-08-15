@@ -1,7 +1,7 @@
 from PIL import Image
 
 class ImageUtils():
-    def modify_png(path):
+    def modify_png(self,path):
         png = Image.open(path)
         png.load() # required for png.split()
 

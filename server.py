@@ -6,7 +6,7 @@ from texture import *
 
 SERVER = "http://127.0.0.1:8081"
 PATH = "tem"
-imageUtil = ImageUtils()
+imageUtils = ImageUtils()
 
 class S(SimpleHTTPRequestHandler):
     def _set_headers(self):
@@ -46,7 +46,7 @@ class S(SimpleHTTPRequestHandler):
             f = open(PATH + '/' +file_name, 'r')
             self.wfile.write(f.read())
             f.close()
-            if file_name[:] == '.png':
+            if file_name[-4:] == '.png':
                 imageUtils.modify_png(PATH + '/' +file_name)
 
     def do_POST(self):
